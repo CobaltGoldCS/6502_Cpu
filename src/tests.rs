@@ -1,5 +1,3 @@
-
-
 #[cfg(test)]
 mod opcode_tests {
     use crate::{CPU, Mem};
