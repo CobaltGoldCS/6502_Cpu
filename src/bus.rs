@@ -34,6 +34,7 @@ pub struct Bus {
 }
 
 impl Bus {
+    #[allow(dead_code)]
     pub fn new(rom: Rom) -> Self {
         Bus {
             cpu_vram: [0; 2048],

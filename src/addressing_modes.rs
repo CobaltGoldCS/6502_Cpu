@@ -18,6 +18,7 @@ pub enum AddressingMode {
 
 
 impl CPU {
+    
     pub fn get_operand_address(&mut self, mode: &AddressingMode) -> u16 {
  
         match mode {

@@ -1,5 +1,3 @@
-#[allow(dead_code)]
-
 const NES_TAG: [u8; 4] = [0x4E, 0x45, 0x53, 0x1A];
 const PRG_ROM_PAGE_SIZE: usize = 16384;
 const CHR_ROM_PAGE_SIZE: usize = 8192;
@@ -8,7 +6,7 @@ const CHR_ROM_PAGE_SIZE: usize = 8192;
 pub enum Mirroring {
     VERTICAL,
     HORIZONTAL,
-    FOUR_SCREEN,
+    FourScreen,
 }
 
 pub struct Rom {
@@ -19,6 +17,7 @@ pub struct Rom {
 }
 
 impl Rom {
+    #[allow(dead_code)]
     pub fn new(raw: &Vec<u8>) -> Result<Rom, String> {
         if &raw[0..4] != NES_TAG {
             return Err("File is not in iNES file format".to_string());
@@ -34,7 +33,7 @@ impl Rom {
         let four_screen = raw[6] & 0b1000 != 0;
         let vertical_mirroring = raw[6] & 0b1 != 0;
         let screen_mirroring = match (four_screen, vertical_mirroring) {
-            (true, _) => Mirroring::FOUR_SCREEN,
+            (true, _) => Mirroring::FourScreen,
             (false, true) => Mirroring::VERTICAL,
             (false, false) => Mirroring::HORIZONTAL,
         };

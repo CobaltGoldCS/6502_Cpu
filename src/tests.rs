@@ -1,20 +1,16 @@
 #[cfg(test)]
-mod opcode_tests {
-    use crate::{CPU, Mem};
-    use crate::Bus;
-    use crate::cartridge::{Rom};
+pub mod test_utilities {
+    pub const PRG_ROM_PAGE_SIZE: usize = 16384;
+    pub const CHR_ROM_PAGE_SIZE: usize = 8192;
 
-    const PRG_ROM_PAGE_SIZE: usize = 16384;
-    const CHR_ROM_PAGE_SIZE: usize = 8192;
-
-    struct TestRom {
-        header: Vec<u8>,
-        trainer: Option<Vec<u8>>,
-        pgp_rom: Vec<u8>,
-        chr_rom: Vec<u8>,
+    pub struct TestRom {
+        pub header: Vec<u8>,
+        pub trainer: Option<Vec<u8>>,
+        pub pgp_rom: Vec<u8>,
+        pub chr_rom: Vec<u8>,
     }
 
-    fn create_rom(rom: TestRom) -> Vec<u8> {
+    pub fn create_rom(rom: TestRom) -> Vec<u8> {
         let mut result = Vec::with_capacity(
             rom.header.len()
                 + rom.trainer.as_ref().map_or(0, |t| t.len())
@@ -31,6 +27,21 @@ mod opcode_tests {
 
         result
     }
+}
+
+#[cfg(test)]
+mod opcode_tests {
+    use crate::{CPU, Mem};
+    use crate::Bus;
+    use crate::cartridge::{Rom};
+
+    use super::test_utilities::{
+        CHR_ROM_PAGE_SIZE,
+        PRG_ROM_PAGE_SIZE,
+        TestRom,
+        create_rom,
+    };
+    
 
     pub fn test_rom() -> Rom {
         let test_rom = create_rom(TestRom {
@@ -105,33 +116,12 @@ mod opcode_tests {
 mod cartridge_tests {
     use crate::cartridge::{Rom, Mirroring};
 
-    const PRG_ROM_PAGE_SIZE: usize = 16384;
-    const CHR_ROM_PAGE_SIZE: usize = 8192;
-
-    struct TestRom {
-        header: Vec<u8>,
-        trainer: Option<Vec<u8>>,
-        pgp_rom: Vec<u8>,
-        chr_rom: Vec<u8>,
-    }
-
-    fn create_rom(rom: TestRom) -> Vec<u8> {
-        let mut result = Vec::with_capacity(
-            rom.header.len()
-                + rom.trainer.as_ref().map_or(0, |t| t.len())
-                + rom.pgp_rom.len()
-                + rom.chr_rom.len(),
-        );
-
-        result.extend(&rom.header);
-        if let Some(t) = rom.trainer {
-            result.extend(t);
-        }
-        result.extend(&rom.pgp_rom);
-        result.extend(&rom.chr_rom);
-
-        result
-    }
+    use super::test_utilities::{
+        CHR_ROM_PAGE_SIZE,
+        PRG_ROM_PAGE_SIZE,
+        TestRom,
+        create_rom,
+    };
 
     #[test]
     fn test() {

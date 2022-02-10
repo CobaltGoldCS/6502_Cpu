@@ -4,6 +4,7 @@ use crate::cpu::CPU;
 use crate::opcodes_table::{Opcode, OPCODES_MAP};
 use std::collections::HashMap;
 
+#[allow(dead_code)]
 pub fn trace(cpu: &CPU) -> String {
     let ref opscodes: HashMap<u8, &'static Opcode> = *OPCODES_MAP;
 
